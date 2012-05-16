@@ -2,7 +2,7 @@
 package main
 
 import (
-	"github.com/zond/gomarket"
+	"../gomarket"
 )
 
 func main() {
