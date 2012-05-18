@@ -6,12 +6,42 @@ import (
 	"fmt"
 )
 
+type SimpleActor struct {
+	name string
+	asks map[*gomarket.Order]bool
+	bids map[*gomarket.Order]bool
+}
+func NewSimpleActor(name string) *SimpleActor {
+	return &SimpleActor{name, make(map[*gomarket.Order]bool), make(map[*gomarket.Order]bool)}
+}
+func (a *SimpleActor) String() string {
+	return a.name
+}
+func (a *SimpleActor) Ask(units float64, resource interface{}, price float64) {
+	a.asks[&gomarket.Order{units, resource, price, a}] = true
+}
+func (a *SimpleActor) Bid(units float64, resource interface{}, price float64) {
+	a.bids[&gomarket.Order{units, resource, price, a}] = true
+}
+func (a *SimpleActor) Asks() map[*gomarket.Order]bool {
+	return a.asks
+}
+func (a *SimpleActor) Bids() map[*gomarket.Order]bool {
+	return a.bids
+}
+func (a *SimpleActor) Buy(ask *gomarket.Order, price float64) {
+	fmt.Println(a, "buys", ask.Units, ask.Resource, "á", price, "from", ask.Actor)
+}
+func (a *SimpleActor) Sell(bid *gomarket.Order, price float64) {
+	fmt.Println(a, "sells", bid.Units, bid.Resource, "á", price, "to", bid.Actor)
+}
+
 func main() {
 	m := gomarket.NewMarket()
-	martin := gomarket.NewSimpleActor("martin")
-	elise := gomarket.NewSimpleActor("elise")
-	emelie := gomarket.NewSimpleActor("emelie")
-	mattias := gomarket.NewSimpleActor("mattias")
+	martin := NewSimpleActor("martin")
+	elise := NewSimpleActor("elise")
+	emelie := NewSimpleActor("emelie")
+	mattias := NewSimpleActor("mattias")
 	rice := "rice"
 	shoes := "shoes"
 	pizza := "pizza"
