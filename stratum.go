@@ -29,11 +29,12 @@ func (a *SimpleActor) Asks() map[*gomarket.Order]bool {
 func (a *SimpleActor) Bids() map[*gomarket.Order]bool {
 	return a.bids
 }
-func (a *SimpleActor) Buy(ask *gomarket.Order, price float64) {
+func (a *SimpleActor) Buy(bid, ask *gomarket.Order, price float64) {
 	fmt.Println(a, "buys", ask.Units, ask.Resource, "á", price, "from", ask.Actor)
+	ask.Actor.Deliver(bid, ask, price)
 }
-func (a *SimpleActor) Sell(bid *gomarket.Order, price float64) {
-	fmt.Println(a, "sells", bid.Units, bid.Resource, "á", price, "to", bid.Actor)
+func (a *SimpleActor) Deliver(bid, ask *gomarket.Order, price float64) {
+	fmt.Println(a, "delivers", bid.Units, bid.Resource, "á", price, "to", bid.Actor)
 }
 
 func main() {
