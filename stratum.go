@@ -58,10 +58,9 @@ func main() {
 	emelie.Ask(2.0, shoes, 20.0)
 	martin.Bid(2.0, pizza, 50.0)
 	mattias.Ask(1.0, shoes, 15.0)
-	m.Actors[martin] = true
-	m.Actors[emelie] = true
-	m.Actors[mattias] = true
-	m.Actors[elise] = true
+	m.Add(martin)
+	m.Add(emelie)
+	m.Add(mattias)
+	m.Add(elise)
 	m.Trade()
-	fmt.Println("prices: ", m.Prices)
 }
