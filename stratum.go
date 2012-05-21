@@ -8,33 +8,33 @@ import (
 
 type SimpleActor struct {
 	name string
-	asks map[*gomarket.Order]bool
-	bids map[*gomarket.Order]bool
+	asks []*gomarket.Order
+	bids []*gomarket.Order
 }
 func NewSimpleActor(name string) *SimpleActor {
-	return &SimpleActor{name, make(map[*gomarket.Order]bool), make(map[*gomarket.Order]bool)}
+	return &SimpleActor{name, nil, nil}
 }
 func (a *SimpleActor) String() string {
 	return a.name
 }
 func (a *SimpleActor) Ask(units float64, resource interface{}, price float64) {
-	a.asks[&gomarket.Order{units, resource, price, a}] = true
+	a.asks = append(a.asks, &gomarket.Order{units, resource, price, a})
 }
 func (a *SimpleActor) Bid(units float64, resource interface{}, price float64) {
-	a.bids[&gomarket.Order{units, resource, price, a}] = true
+	a.bids = append(a.bids, &gomarket.Order{units, resource, price, a})
 }
-func (a *SimpleActor) Asks() map[*gomarket.Order]bool {
+func (a *SimpleActor) Asks() []*gomarket.Order {
 	return a.asks
 }
-func (a *SimpleActor) Bids() map[*gomarket.Order]bool {
+func (a *SimpleActor) Bids() []*gomarket.Order {
 	return a.bids
 }
 func (a *SimpleActor) Buy(bid, ask *gomarket.Order, price float64) {
-	fmt.Println(a, "buys", ask.Units, ask.Resource, "á", price, "from", ask.Actor)
-	ask.Actor.Deliver(bid, ask, price)
+	fmt.Println(a, "buys", ask.Units, ask.Resource, "á", price, "from", ask.Carrier)
+	ask.Carrier.Deliver(bid, ask, price)
 }
 func (a *SimpleActor) Deliver(bid, ask *gomarket.Order, price float64) {
-	fmt.Println(a, "delivers", bid.Units, bid.Resource, "á", price, "to", bid.Actor)
+	fmt.Println(a, "delivers", bid.Units, bid.Resource, "á", price, "to", bid.Carrier)
 }
 
 func main() {
